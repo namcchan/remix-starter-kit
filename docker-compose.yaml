@@ -1,0 +1,36 @@
+services:
+  remix:
+    container_name: remix
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    tty: true
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "5713:5713"
+      - "5555:5555"
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: lottery
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+  node_modules:
